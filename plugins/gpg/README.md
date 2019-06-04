@@ -11,3 +11,4 @@ plugins=(... gpg)
 Alias | Command | Use | Description
 --- | --- | --- | ---
 `gpglk` | `gpg --list-secret-key --keyid-format LONG` | `gpglk [email]` | Prints out secret key in long format
+`gpgep` | `gpg --armor --exort` | `gpgep [email]` | Export the public key for key of the given email
