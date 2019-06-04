@@ -1,0 +1,1 @@
+alias gpglk='gpg --list-secret-key --keyid-format LONG'
