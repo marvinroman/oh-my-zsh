@@ -69,6 +69,14 @@ alias gcml='git config user.email'
 alias gcnm='git config user.name'
 alias gcgpgt='git config commit.gpgsign true'
 alias gcgpgf='git config commit.gpgsign false'
+funcgion gcck() {
+  if [[ -z "$1" ]]; then
+    echo "You need pass in ssh key name"
+    echo "example: gcck test_rsa"
+  else 
+    git config core.sshCommand "ssh -o IdentitiesOnly=yes -i ~/.ssh/${1} -F /dev/null"
+  fi
+}
 alias gcl='git clone --recurse-submodules'
 alias gclean='git clean -id'
 alias gpristine='git reset --hard && git clean -dfx'
@@ -182,6 +190,7 @@ alias gloga='git log --oneline --decorate --graph --all'
 alias glp="_git_log_prettily"
 
 alias gm='git merge'
+alias gmnf='git merge --no-ff'
 alias gmom='git merge origin/master'
 alias gmt='git mergetool --no-prompt'
 alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
