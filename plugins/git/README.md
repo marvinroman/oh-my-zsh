@@ -134,6 +134,7 @@ Alias | Full Command | Use | Description
 | gloga                | git log --oneline --decorate --graph --all                                                                                    |
 | glp                  | `_git_log_prettily`                                                                                                           |
 | gm                   | git merge                                                                                                                     |
+| gmnf                 | git merge --no-ff                                                                                                             |
 | gmom                 | git merge origin/master                                                                                                       |
 | gmt                  | git mergetool --no-prompt                                                                                                     |
 | gmtvim               | git mergetool --no-prompt --tool=vimdiff                                                                                      |
