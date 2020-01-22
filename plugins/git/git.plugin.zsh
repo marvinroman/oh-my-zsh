@@ -10,6 +10,20 @@ function current_branch() {
   git_current_branch
 }
 
+# checkout development branch and merge the current branch into it
+function gmwd() {
+  merge_branch=$(git_current_branch)
+  git checkout develop
+  git merge --no-ff $merge_branch
+}
+
+# checkout master branch and merge the current branch into it
+function gmwm() {
+  merge_branch=$(git_current_branch)
+  git checkout master
+  git merge --no-ff $merge_branch
+}
+
 # Pretty log messages
 function _git_log_prettily(){
   if ! [ -z $1 ]; then
