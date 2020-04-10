@@ -221,11 +221,12 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 
 ### Current
 
-| Command                | Description                             |
-|:-----------------------|:----------------------------------------|
-| current_branch         | Return the name of the current branch   |
-| git_current_user_name  | Returns the `user.name` config value    |
-| git_current_user_email | Returns the `user.email` config value   |
+| Command                | Description                                              |
+|:-----------------------|:---------------------------------------------------------|
+| `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote |
+| current_branch         | Return the name of the current branch                    |
+| git_current_user_name  | Returns the `user.name` config value                     |
+| git_current_user_email | Returns the `user.email` config value                    |
 
 ### Work in Progress (WIP)
 
@@ -237,7 +238,7 @@ These features allow to pause a branch development and switch to another one (_"
 | gwip             | Commit wip branch                               |
 | gunwip           | Uncommit wip branch                             |
 
-### Deprecated
+### Deprecated functions
 
 | Command                | Description                             | Reason                                                          |
 |:-----------------------|:----------------------------------------|:----------------------------------------------------------------|
