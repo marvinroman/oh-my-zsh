@@ -1,5 +1,6 @@
 # Open the current directory in a Finder window
 alias ofd='open_command $PWD'
+alias rmds='find ./ -name .DS_Store -delete'
 
 function _omz_osx_get_frontmost_app() {
   local the_app=$(
