@@ -18,6 +18,7 @@ if it's found, or the mvn command otherwise.
 | `mvn!`               | `mvn -f <root>/pom.xml`                         |
 | `mvnag`              | `mvn archetype:generate`                        |
 | `mvnboot`            | `mvn spring-boot:run`                           |
+| `mvnqdev`            | `mvn quarkus:dev`                               |
 | `mvnc`               | `mvn clean`                                     |
 | `mvncd`              | `mvn clean deploy`                              |
 | `mvnce`              | `mvn clean eclipse:clean eclipse:eclipse`       |
@@ -35,6 +36,7 @@ if it's found, or the mvn command otherwise.
 | `mvndocs`            | `mvn dependency:resolve -Dclassifier=javadoc`   |
 | `mvndt`              | `mvn dependency:tree`                           |
 | `mvne`               | `mvn eclipse:eclipse`                           |
+| `mvnfmt`             | `mvn fmt:format`                                |
 | `mvnjetty`           | `mvn jetty:run`                                 |
 | `mvnp`               | `mvn package`                                   |
 | `mvns`               | `mvn site`                                      |

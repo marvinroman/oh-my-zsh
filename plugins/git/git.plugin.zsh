@@ -1,3 +1,7 @@
+# Git version checking
+autoload -Uz is-at-least
+git_version="${${(As: :)$(git version 2>/dev/null)}[3]}"
+
 #
 # Functions
 #
@@ -39,6 +43,19 @@ function work_in_progress() {
   fi
 }
 
+# Check if main exists and use instead of master
+function git_main_branch() {
+  command git rev-parse --git-dir &>/dev/null || return
+  local branch
+  for branch in main trunk; do
+    if command git show-ref -q --verify refs/heads/$branch; then
+      echo $branch
+      return
+    fi
+  done
+  echo master
+}
+
 #
 # Aliases
 # (sorted alphabetically)
@@ -52,11 +69,12 @@ alias gapa='git add --patch'
 alias gau='git add --update'
 alias gav='git add --verbose'
 alias gap='git apply'
+alias gapt='git apply --3way'
 
 alias gb='git branch'
 alias gba='git branch -a'
 alias gbd='git branch -d'
-alias gbda='git branch --no-color --merged | command grep -vE "^(\+|\*|\s*(master|develop|dev)\s*$)" | command xargs -n 1 git branch -d'
+alias gbda='git branch --no-color --merged | command grep -vE "^(\+|\*|\s*($(git_main_branch)|development|develop|devel|dev)\s*$)" | command xargs -n 1 git branch -d'
 alias gbD='git branch -D'
 alias gbl='git blame -b -w'
 alias gbnm='git branch --no-merged'
@@ -93,8 +111,8 @@ funcgion gcck() {
 }
 alias gcl='git clone --recurse-submodules'
 alias gclean='git clean -id'
-alias gpristine='git reset --hard && git clean -dfx'
-alias gcm='git checkout master'
+alias gpristine='git reset --hard && git clean -dffx'
+alias gcm='git checkout $(git_main_branch)'
 alias gcd='git checkout develop'
 alias gcmsg='git commit -m'
 alias gco='git checkout'
@@ -113,11 +131,19 @@ alias gdt='git diff-tree --no-commit-id --name-only -r'
 alias gdw='git diff --word-diff'
 alias gdcs='git diff --compact-summary'
 
+function gdnolock() {
+  git diff "$@" ":(exclude)package-lock.json" ":(exclude)*.lock"
+}
+compdef _git gdnolock=git-diff
+
 function gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 
 alias gf='git fetch'
-alias gfa='git fetch --all --prune'
+# --jobs=<n> was added in git 2.8
+is-at-least 2.8 "$git_version" \
+  && alias gfa='git fetch --all --prune --jobs=10' \
+  || alias gfa='git fetch --all --prune'
 alias gfo='git fetch origin'
 
 alias gfg='git ls-files | grep'
@@ -183,7 +209,7 @@ alias ghh='git help'
 
 alias gignore='git update-index --assume-unchanged'
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
-alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
+alias git-svn-dcommit-push='git svn dcommit && git push github $(git_main_branch):svntrunk'
 
 alias gk='\gitk --all --branches'
 alias gke='\gitk --all $(git log -g --pretty=%h)'
@@ -206,10 +232,10 @@ alias glp="_git_log_prettily"
 
 alias gm='git merge'
 alias gmnf='git merge --no-ff'
-alias gmom='git merge origin/master'
+alias gmom='git merge origin/$(git_main_branch)'
 alias gmt='git mergetool --no-prompt'
 alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
-alias gmum='git merge upstream/master'
+alias gmum='git merge upstream/$(git_main_branch)'
 alias gma='git merge --abort'
 
 alias gp='git push'
@@ -227,7 +253,7 @@ alias grba='git rebase --abort'
 alias grbc='git rebase --continue'
 alias grbd='git rebase develop'
 alias grbi='git rebase -i'
-alias grbm='git rebase master'
+alias grbm='git rebase $(git_main_branch)'
 alias grbs='git rebase --skip'
 alias grev='git revert'
 alias grh='git reset'
@@ -255,8 +281,7 @@ alias gss='git status -s'
 alias gst='git status'
 
 # use the default stash push on git 2.13 and newer
-autoload -Uz is-at-least
-is-at-least 2.13 "$(git --version 2>/dev/null | awk '{print $3}')" \
+is-at-least 2.13 "$git_version" \
   && alias gsta='git stash push' \
   || alias gsta='git stash save'
 
@@ -282,10 +307,16 @@ alias gup='git pull --rebase'
 alias gupv='git pull --rebase -v'
 alias gupa='git pull --rebase --autostash'
 alias gupav='git pull --rebase --autostash -v'
-alias glum='git pull upstream master'
+alias glum='git pull upstream $(git_main_branch)'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
+
+alias gam='git am'
+alias gamc='git am --continue'
+alias gams='git am --skip'
+alias gama='git am --abort'
+alias gamscp='git am --show-current-patch'
 
 function grename() {
   if [[ -z "$1" || -z "$2" ]]; then
@@ -300,3 +331,5 @@ function grename() {
     git push --set-upstream origin "$2"
   fi
 }
+
+unset git_version
