@@ -1,0 +1,1 @@
+ alias rmds='find ./ -name .DS_Store -delete'
